@@ -4,7 +4,7 @@ import world.World;
 public class WorldBuilder {
 	public static void main(String[] args) {
 
-		String seed = "poop";
+		String seed = "Lars";
 
 		WorldGenerator wg = new WorldGenerator(seed);
 
