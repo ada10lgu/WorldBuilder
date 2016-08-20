@@ -32,7 +32,7 @@ public class DataLoader {
 
 	@Override
 	public String toString() {
-		return obj.toString();
+		return obj.toString(4);
 	}
 
 }

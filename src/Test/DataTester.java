@@ -8,7 +8,7 @@ import data.DataLoader;
 public class DataTester {
 	public static void main(String[] args) throws FileNotFoundException {
 
-		DataLoader dl = new DataLoader(new File("data/test.json"));
+		DataLoader dl = new DataLoader(new File("data/temp.json"));
 System.out.println(dl);
 	}
 }
