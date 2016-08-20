@@ -28,7 +28,24 @@ public class Point {
 
 	public List<Point> neighbours() {
 		ArrayList<Point> points = new ArrayList<>();
-		
+		points.add(new Point(x, y + 1));
+		points.add(new Point(x, y - 1));
+		points.add(new Point(x + 1, y));
+		points.add(new Point(x - 1, y));
+
 		return points;
+	}
+
+	@Override
+	public int hashCode() {
+		return toString().hashCode();
+	}
+	
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Point)
+			return ((Point) obj).hashCode() == hashCode();
+		return false;
 	}
 }

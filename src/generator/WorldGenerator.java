@@ -23,9 +23,19 @@ public class WorldGenerator {
 		ArrayList<Point> points = new ArrayList<>();
 		ArrayList<Point> options = new ArrayList<>();
 
-		Point p = new Point(0, 0);
-		options.addAll(p.neighbours());
-		points.add(p);
+		Point first = new Point(0, 0);
+		options.addAll(first.neighbours());
+		points.add(first);
+
+		while (points.size() < regions) {
+			int index = r.nextInt(options.size());
+			System.out.println(index);
+			Point p = options.remove(index);
+			options.addAll(p.neighbours());
+			if (!points.contains(p))
+				points.add(p);
+		}
+
 		return points;
 	}
 
