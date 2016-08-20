@@ -25,7 +25,7 @@ public class WorldCalculateAltitude extends Algorithm<Zone, Double> {
 			return 0.0;
 		}
 		x++;
-		Double answer = Math.log(x + 1);
+		Double answer = Math.log(x + 1)*Math.pow(x, 2)/100;
 		z.addAltitude(answer);
 		return answer;
 	}
