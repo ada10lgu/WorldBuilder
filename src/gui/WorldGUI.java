@@ -52,7 +52,7 @@ public class WorldGUI extends JFrame {
 
 			int size = (int) Math.min(xSize, ySize);
 
-			g.setColor(Color.WHITE);
+			g.setColor(Color.BLUE);
 			g.fillRect(0, 0, getWidth(), getHeight());
 
 			FontMetrics fm = g.getFontMetrics();
