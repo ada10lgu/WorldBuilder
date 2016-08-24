@@ -26,8 +26,8 @@ public class WorldGenerator {
 	}
 
 	private ArrayList<Zone> generateRegions(int regions) {
-		ArrayList<Point> points = new ArrayList<>();
-		ArrayList<Point> options = new ArrayList<>();
+		ArrayList<Point> points = new ArrayList<Point>();
+		ArrayList<Point> options = new ArrayList<Point>();
 
 		Point first = new Point(0, 0);
 		options.addAll(first.neighbours());
@@ -41,7 +41,7 @@ public class WorldGenerator {
 				options.addAll(p.neighbours());
 			}
 		}
-		ArrayList<Zone> zones = new ArrayList<>();
+		ArrayList<Zone> zones = new ArrayList<Zone>();
 
 		for (Point p : points)
 			zones.add(new Zone(p, 0));
@@ -64,7 +64,7 @@ public class WorldGenerator {
 		int xSize = (int) (xMax - xMin + 1);
 		int ySize = (int) (yMax - yMin + 1);
 
-		HashMap<Point, Zone> sortedList = new HashMap<>();
+		HashMap<Point, Zone> sortedList = new HashMap<Point, Zone>();
 
 		for (Zone z : zones) {
 			sortedList.put(z.getPoint(), z);

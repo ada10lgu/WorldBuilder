@@ -27,7 +27,7 @@ public class Point {
 	}
 
 	public List<Point> neighbours() {
-		ArrayList<Point> points = new ArrayList<>();
+		ArrayList<Point> points = new ArrayList<Point>();
 		points.add(new Point(x, y + 1));
 		points.add(new Point(x, y - 1));
 		points.add(new Point(x + 1, y));
