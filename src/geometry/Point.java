@@ -5,33 +5,37 @@ import java.util.List;
 
 public class Point {
 
-	private long x, y;
-
-	public Point(long x, long y) {
-		this.x = x;
-		this.y = y;
+	private long[] point;
+	
+	public Point(long...pos) {
+		point = pos;
 	}
+	
 
 	public long getX() {
-		return x;
+		return point[0];
 
 	}
 
 	public long getY() {
-		return y;
+		return point[1];
+	}
+	
+	public int axisNr(){
+		return point.length;
 	}
 
 	@Override
 	public String toString() {
-		return "[" + x + "," + y + "]";
+		return "[" + point[0] + "," + point[1] + "]";
 	}
 
 	public List<Point> neighbours() {
 		ArrayList<Point> points = new ArrayList<Point>();
-		points.add(new Point(x, y + 1));
-		points.add(new Point(x, y - 1));
-		points.add(new Point(x + 1, y));
-		points.add(new Point(x - 1, y));
+		points.add(new Point(point[0], point[1] + 1));
+		points.add(new Point(point[0], point[1] - 1));
+		points.add(new Point(point[0] + 1, point[1]));
+		points.add(new Point(point[0] - 1, point[1]));
 
 		return points;
 	}
