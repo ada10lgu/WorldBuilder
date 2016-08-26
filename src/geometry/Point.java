@@ -25,6 +25,10 @@ public class Point {
 		return point[2];
 	}
 	
+	public long get(int n){
+		return point[n];
+	}
+	
 	public int axisNr(){
 		return point.length;
 	}

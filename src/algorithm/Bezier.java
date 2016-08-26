@@ -4,6 +4,12 @@ import geometry.Point;
 
 import java.util.ArrayList;
 
+/*
+t is ratio of curve, example P⁰=[0][0], P¹=[1][2]
+b¹=(1-t)*P⁰ +t*P¹ ---> b¹=[t][2*t]
+t is also distance on the curve and the output becomes [x][y] 
+for that point
+*/
 public class Bezier {
 
 	ArrayList<Point> points;
@@ -18,25 +24,21 @@ public class Bezier {
 		a = 0;
 	}
 
-	public boolean addPoints(ArrayList<Point> pos) {
-		int m = pos.get(0).axisNr();
-		if(m==0){
-			points.addAll(pos);
-			n = n + pos.size();
-			a = m;
-			return true;
-		}else if(m == a){
-			points.addAll(pos);
-			n = n + pos.size();
+	public void addPoints(ArrayList<Point> pos) {
+		while(!pos.isEmpty()){
+			this.addPoint(pos.get(0));
+			this.addPoint(pos.remove(0));
+		}
+	}
+	
+	public boolean addPoint(Point p) {
+		if(p.axisNr() == a || points.isEmpty()){
+			a = p.axisNr();
+			points.add(p);
+			n++;
 			return true;
 		}
 		return false;
-
-	}
-	
-	public void addPoint(Point p) {
-		points.add(p);
-		n++;
 	}
 
 	private void init() {
@@ -45,10 +47,8 @@ public class Bezier {
 		}
 		for (int i = 0; i < n; i++) {
 			for(int j=0;i<a;i++){
-				bxyz.get(0)[0][i] = points.get(i).getX();
-				bxyz.get(1)[0][i] = points.get(i).getY();
-				if(a==3){
-					bxyz.get(2)[0][i] = points.get(i).getZ();
+				for(int k=0;k<a;k++){
+					bxyz.get(k)[0][i] = points.get(i).get(k);
 				}
 			}
 		}
