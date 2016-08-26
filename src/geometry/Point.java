@@ -21,6 +21,10 @@ public class Point {
 		return point[1];
 	}
 	
+	public long getZ(){
+		return point[2];
+	}
+	
 	public int axisNr(){
 		return point.length;
 	}
