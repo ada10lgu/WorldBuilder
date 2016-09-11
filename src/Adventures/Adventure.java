@@ -1,3 +1,4 @@
+package Adventures;
 import java.io.Console;
 import java.io.InputStreamReader;
 import java.util.ArrayList;

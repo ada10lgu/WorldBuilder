@@ -4,68 +4,64 @@ package geometry;
 import java.util.ArrayList;
 
 /*
-t is ratio of curve, example P⁰=[0][0], P¹=[1][2]
-b¹=(1-t)*P⁰ +t*P¹ ---> b¹=[t][2*t]
+t is ratio of curve, example P�=[0][0], P�=[1][2]
+b¹=(1-t)*P� +t*P¹ ---> b¹=[t][2*t]
 t is also distance on the curve and the output becomes [x][y] 
 for that point
 */
 public class Bezier {
 
 	ArrayList<Point> points;
-	ArrayList<long[][]> bxyz;
+	ArrayList<double[][]> bxyz;
 	int n;								//number of points
 	int a;								//number of axis
-	long[] value;
+	double[] value;
 	public Bezier() {
 		points = new ArrayList<Point>();
-		value = null;
+		bxyz = new ArrayList<double[][]>();
 		n = 0;
 		a = 0;
 	}
 
-	public boolean addPoint(Point...p) {
+	public void addPoint(Point...p) {
 		for(int k=0;k<p.length;k++){
 			if(p[k].axisNr() == a || points.isEmpty()){
 				a = p[k].axisNr();
 				points.add(p[k]);
 				n++;
-				return true;
 			}
 		}
-		return false;
 	}
 
 	private void init() {
 		while(bxyz.size()<a){
-			bxyz.add(new long[n][n]);
+			bxyz.add(new double[n][n]);
 		}
 		for (int i = 0; i < n; i++) {
-			for(int j=0;i<a;i++){
-				for(int k=0;k<a;k++){
-					bxyz.get(k)[0][i] = points.get(i).get(k);
-				}
+			for(int k=0;k<a;k++){
+				bxyz.get(k)[0][i] = points.get(i).get(k);
 			}
 		}
 	}
 
-	public long Bez(long b0, long b1, long t) {
-		long b = b0 * (1 - t) + b1 * t;
+	public double Bez(double b0, double b1, double t) {
+		double b = b0 * (1 - t) + b1 * t;
 		return b;
 	}
 	
-	public long[] calBez(long... t){
-		value = new long[3];
+	public double[] calBez(double... t){
+		value = new double[a];
 		init();
-		long tc = t[0]; 					//t current
-		for (int k = 1; k < n; k++) {
-			if(k-1<a-1){
-				tc = t[k-1];
-			}
-			for (int j = 0; j < n - k; j++) {
-				for(int i=0;i<bxyz.size();i++){
-					bxyz.get(i)[k][j] = this.Bez(bxyz.get(i)[k-1][j], bxyz.get(i)[k-1][j+1], tc);
+		double tc = t[0]; 					//t current
+		for (int k = 0; k < a; k++) {
+			for (int j = 1; j < n; j++) {
+				for(int i=0;i<n-j;i++){
+					double b0 = bxyz.get(k)[j-1][i];
+					double b = bxyz.get(k)[j-1][i+1];
+					bxyz.get(k)[j][i] = this.Bez(b0, b, tc);
 				}
 			}
+			value[k] = bxyz.get(k)[n-1][0];
 		}
 		return value;
 	}

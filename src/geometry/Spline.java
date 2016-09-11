@@ -38,7 +38,7 @@ public class Spline {
 		}
 	}
 	
-	public long[] calSpline(long t, Point p0, Point p2){
+	public long[] calSpline(double t, Point p0, Point p2){
 		long[] value = new long[p0.axisNr()];
 		int k0 = points.indexOf(p0);
 		int k2 = points.indexOf(p2);
