@@ -12,11 +12,11 @@ public class Zone {
 	}
 
 	public long getX() {
-		return p.getX();
+		return (long)p.getX();
 	}
 
 	public long getY() {
-		return p.getY();
+		return (long)p.getY();
 	}
 
 	public double getAltitude() {

@@ -9,8 +9,10 @@ import geometry.*;
 public class Spline {
 	ArrayList<Point> points;
 	ArrayList<Bezier> bez;
+	int a;
 
 	public Spline(Point...knots) {
+		a = 0;
 		points = new ArrayList<Point>();
 		points.add(knots[0]);
 		for(int k=1;k<knots.length;k++){
@@ -19,10 +21,13 @@ public class Spline {
 	}
 	
 	public void addKnot(Point knot){
-		long[] cord;
-		cord = new long[knot.axisNr()];
-		for(int j=0;j<knot.axisNr();j++){
-			cord[j] = knot.get(j)-points.get(points.size()).get(j);
+		double[] cord;
+		if(a==0 || a>knot.axisNr()){
+			a= knot.axisNr();
+		}
+		cord = new double[a];
+		for(int k=0;k<a;k++){
+			cord[k] =  (points.get(points.size()-1).get(k)+knot.get(k))/2;  
 		}
 		points.add(new Point(cord));
 		points.add(knot);
@@ -30,25 +35,33 @@ public class Spline {
 	
 	public void init(){				//init and creates bezier curves
 		bez = new ArrayList<Bezier>();
-		for(int k=1;k<points.size()-1;k=k+3){
+		
+		for(int k=0;k<points.size();k=k+2){
+			System.out.println(k+" "+points.size());
 			Bezier b = new Bezier();
+			if(k!=0){
+				b.addPoint(points.get(k-1));
+			}
 			b.addPoint(points.get(k));
-			b.addPoint(points.get(k+1));
-			b.addPoint(points.get(k+2));
+			if(k+1<points.size()){
+				b.addPoint(points.get(k+1));
+			}
+			bez.add(b);
 		}
 	}
 	
-	public long[] calSpline(double t, Point p0, Point p2){
-		long[] value = new long[p0.axisNr()];
-		int k0 = points.indexOf(p0);
-		int k2 = points.indexOf(p2);
-		int k1;
-		if(k0<k2){
-			k1 = k0+1;
-		}else{
-			k1 = k2+1;
+	public double[] calSpline(double u){
+		init();
+		double[] value = new double[a];
+		double u0 = 1/((double)bez.size());
+		double ui = 0;
+		while(u>ui+u0){
+			ui = ui+u0;
 		}
-		
+		double uj = ui+u0;						//ui+1
+		int k = (int)(u*bez.size());
+		double t = (u-ui)/(uj-ui);
+		value = bez.get(k).calBez(t);
 		return value;
 	}
 }

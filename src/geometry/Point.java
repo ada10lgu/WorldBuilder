@@ -5,27 +5,27 @@ import java.util.List;
 
 public class Point {
 
-	private long[] point;
+	private double[] point;
 	
-	public Point(long...pos) {
+	public Point(double...pos) {
 		point = pos;
 	}
 	
 
-	public long getX() {
+	public double getX() {
 		return point[0];
 
 	}
 
-	public long getY() {
+	public double getY() {
 		return point[1];
 	}
 	
-	public long getZ(){
+	public double getZ(){
 		return point[2];
 	}
 	
-	public long get(int n){
+	public double get(int n){
 		return point[n];
 	}
 	
