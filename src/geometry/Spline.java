@@ -12,6 +12,10 @@ public class Spline {
 	int a;
 
 	public Spline(Point...knots) {
+		/**
+		 * creates a spline with 0.5 ratio cord to knot
+		 * to create custom add individual knots with double c argument
+		*/
 		a = 0;
 		points = new ArrayList<Point>();
 		points.add(knots[0]);
@@ -21,23 +25,32 @@ public class Spline {
 	}
 	
 	public void addKnot(Point knot){
+		/**
+		 * 	Standard knot creates with a cord 0.5u between last knot and new knot 
+		 */
+		this.addKnot(knot, 0.5);
+	}
+	
+	public void addKnot(Point knot, double c){
+		/*
+		 * 	old knot ----(1-c)---- cord ---(c)----- new knot
+		 */
 		double[] cord;
 		if(a==0 || a>knot.axisNr()){
 			a= knot.axisNr();
 		}
 		cord = new double[a];
 		for(int k=0;k<a;k++){
-			cord[k] =  (points.get(points.size()-1).get(k)+knot.get(k))/2;  
+			cord[k] =  ((1-c)*points.get(points.size()-1).get(k)+c*knot.get(k));  
 		}
 		points.add(new Point(cord));
 		points.add(knot);
 	}
 	
-	public void init(){				//init and creates bezier curves
+	public void init(){				//initiate and creates bezier curves
 		bez = new ArrayList<Bezier>();
 		
 		for(int k=0;k<points.size();k=k+2){
-			System.out.println(k+" "+points.size());
 			Bezier b = new Bezier();
 			if(k!=0){
 				b.addPoint(points.get(k-1));
@@ -50,7 +63,10 @@ public class Spline {
 		}
 	}
 	
-	public double[] calSpline(double u){
+	public double[] calStrictSpline(double u){
+		/**
+		 * Strict Spline calculation without any more then bezier three points
+		 */
 		init();
 		double[] value = new double[a];
 		double u0 = 1/((double)bez.size());

@@ -1,49 +1,119 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import geometry.Spline;
+import interfaces.ThreadListener;
 import geometry.Bezier;
 import geometry.Point;
 import world.Zone;
 
 @SuppressWarnings("serial")
-public class AppGUI extends JFrame {
+public class AppGUI extends JFrame implements Runnable {
 
 	/*
 	 * Forest Plains Mountain Desert Swamp
 	 */
-
 	private ArrayList<Zone> points;
-
+	Canvas can;
+	CmdField cmd;
+	private ThreadListener listener = null;
+	
+	// Data sender
+	String output;
+	
+	/**
+	 * Listener of actions
+	 */
+	final List<String> holder = new LinkedList<String>();
+	
 	public AppGUI() {
-
-		setSize(1200, 900);
-		add(new Canvas());
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setVisible(true);
+		/**
+		 * initiate the graphical 
+		 */
+		output = null;
+		
+		setSize(1200, 900);	
+		setDefaultCloseOperation(EXIT_ON_CLOSE);		
+		
+		can = new Canvas();
+		add(can);
+		can.setOpaque(true);
+		can.setBackground(Color.WHITE);
+		can.setLayout(null);
+				
+		cmd = new CmdField();
+		cmd.setSize(getHeight()*2/3, 30);
+        cmd.setLocation(getHeight()/8, 800);
+		can.add(cmd);
 	}
+	
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
+		cmd.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e){
+				synchronized (holder){
+					holder.add(cmd.getName());
+					System.out.println(cmd.getText());
+					holder.notify();
+				}
 
-	private class Canvas extends JPanel {
-		@Override
-		public void paint(Graphics g) {
-			g.setColor(Color.BLACK);
-			g.fillRect(0, 0, getWidth(), getHeight());
-			
-			testBezier(g);			//test bezier drawing
-			
-			testSplines(g);			//test spline drawing
+			}
+
+		});
+		
+		setVisible(true);
+		
+		while(true){
+			//logic
+			synchronized (holder) {
+				// input wait
+				while (holder.isEmpty())
+					try {
+						holder.wait();
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				
+				String nextCmd = holder.remove(0);
+				if(nextCmd!=null){
+					output = nextCmd;
+					
+					infoListener();
+				}
+				
+			}
+		}
+	}
+	
+	public void addListener(ThreadListener listener) {
+		this.listener = listener;
+	}
+	
+	private void infoListener(){
+		if (listener!=null) {
+			listener.onInput(output);
 		}
 	}
 
 	Bezier b;
-	
 	private void testBezier(Graphics g){
 		Point[] point = new Point[4];
 		point[0] = new Point(0,0);
@@ -69,7 +139,6 @@ public class AppGUI extends JFrame {
 	}
 	
 	Spline sp;
-	
 	private void testSplines(Graphics g){
 		Point[] knots = new Point[4];
 		knots[0] = new Point(0,0);
@@ -83,19 +152,45 @@ public class AppGUI extends JFrame {
 		g.fillOval((int)knots[2].getX() - 5, (int)knots[2].getY() - 5, 10, 10);
 		g.fillOval((int)knots[3].getX() - 5, (int)knots[3].getY() - 5, 10, 10);
 		
-		g.setColor(Color.BLUE);
-		g.fillOval(((int)knots[0].getX()+(int)knots[1].getX())/2 - 5 , ((int)knots[0].getY()+(int)knots[1].getY())/2 - 5, 10, 10);
-		g.fillOval(((int)knots[1].getX()+(int)knots[2].getX())/2 - 5, ((int)knots[1].getY()+(int)knots[2].getY())/2 - 5, 10, 10);
-		g.fillOval(((int)knots[2].getX()+(int)knots[3].getX())/2 - 5, ((int)knots[2].getY()+(int)knots[3].getY())/2 - 5, 10, 10);
 		
-		sp = new Spline(knots);
+		double c0 = 0.5;
+		double c1 = 0.5;
+		double c2 = 0.5;
+		g.setColor(Color.BLUE);
+		g.fillOval((int)((1-c0)*knots[0].getX()+c0*knots[1].getX()) - 5 , (int)((1-c0)*knots[0].getY()+c0*knots[1].getY()) - 5, 10, 10);
+		g.fillOval((int)((1-c1)*knots[1].getX()+c1*knots[2].getX()) - 5, (int)((1-c1)*knots[1].getY()+c1*knots[2].getY()) - 5, 10, 10);
+		g.fillOval((int)((1-c2)*knots[2].getX()+c2*knots[3].getX()) - 5, (int)((1-c2)*knots[2].getY()+c2*knots[3].getY()) - 5, 10, 10);
+		
+		sp = new Spline(knots[0]);
+		sp.addKnot(knots[1], c0);
+		sp.addKnot(knots[2], c1);
+		sp.addKnot(knots[3], c2);
 		for(int t10000=0;t10000<10000;t10000++){
 			double t = (double)t10000;
 			t = t/10000;
-			double[] xy = sp.calSpline(t);
+			double[] xy = sp.calStrictSpline(t);
 			g.setColor(Color.WHITE);
 			g.fillRect((int)xy[0], (int)xy[1], 1, 1);
 		}
 	}
+
 	
+	
+	
+	private class CmdField extends JTextField {
+		
+	}
+
+	private class Canvas extends JPanel {
+		@Override
+		public void paint(Graphics g) {
+			g.setColor(Color.BLACK);
+			g.fillRect(0, 0, getWidth(), getHeight());
+			g.setColor(Color.WHITE);
+			
+			testBezier(g);			//test bezier drawing
+			
+			testSplines(g);			//test spline drawing
+		}
+	}
 }
