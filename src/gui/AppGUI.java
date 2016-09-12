@@ -130,7 +130,6 @@ public class AppGUI extends JFrame implements Runnable {
 			g.setColor(Color.BLACK);
 			g.fillRect(0, 0, getWidth(), getHeight());
 			
-			VectorTest();
 		}
 		
 		Bezier b;
