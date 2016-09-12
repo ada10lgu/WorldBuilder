@@ -4,13 +4,15 @@ import interfaces.ThreadListener;
 
 public class Game extends Thread implements ThreadListener{
 	
+	AppGUI gui;
+	
 	public static void main(String[] args) {
 		(new Game()).start();
 	}
 	
 	@Override
 	public void run() {
-		AppGUI gui = new AppGUI();
+		gui = new AppGUI();
 		
 		gui.addListener(this);
 		
@@ -21,6 +23,7 @@ public class Game extends Thread implements ThreadListener{
 	public void onInput(String input) {
 		// TODO Auto-generated method stub
 		System.out.println(input);
+		gui.VectorTest();		//not working ?!
 	}
 	
 }
