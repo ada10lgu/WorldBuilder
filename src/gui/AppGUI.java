@@ -6,17 +6,21 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import geometry.Spline;
 import interfaces.ThreadListener;
+import javafx.scene.layout.Border;
 import geometry.Bezier;
 import geometry.Point;
 import world.Zone;
@@ -27,9 +31,9 @@ public class AppGUI extends JFrame implements Runnable {
 	/*
 	 * Forest Plains Mountain Desert Swamp
 	 */
-	private ArrayList<Zone> points;
 	Canvas can;
 	CmdField cmd;
+	JPanel textMng;
 	private ThreadListener listener = null;
 	
 	// Data sender
@@ -56,13 +60,23 @@ public class AppGUI extends JFrame implements Runnable {
 		can.setLayout(null);
 				
 		cmd = new CmdField();
-		cmd.setSize(getHeight()*2/3, 30);
-        cmd.setLocation(getHeight()/8, 800);
+		cmd.setSize(getWidth()*2/3, 30);
+        cmd.setLocation(getWidth()/8, getHeight()*8/9);
 		can.add(cmd);
+		
+		textMng = new JPanel();
+	//	textMng.setOpaque(true);
+		textMng.setBackground(Color.RED);
+		textMng.setSize(getWidth()*2/3, getHeight()*15/18);
+		textMng.setLocation(getWidth()/8, 20);
+		can.add(textMng);
+		
+		
 	}
 	
 	@Override
 	public void run() {
+		
 		
 		cmd.addActionListener(new ActionListener(){
 			@Override
@@ -107,92 +121,11 @@ public class AppGUI extends JFrame implements Runnable {
 		if (listener!=null) {
 			listener.onInput(input);
 		}
-	}
 
-	public void VectorTest(){
-		can.testBezier();
-		can.testSplines();
-	}
-
-	
-	
+	}	
 	
 	private class CmdField extends JTextField {
 		
 	}
 
-	private class Canvas extends JPanel {
-		
-		private Graphics gr;
-		@Override
-		public void paint(Graphics g) {
-			gr=g;
-			g.setColor(Color.BLACK);
-			g.fillRect(0, 0, getWidth(), getHeight());
-			
-		}
-		
-		Bezier b;
-		private void testBezier(){
-			gr.setColor(Color.WHITE);
-			Point[] point = new Point[4];
-			point[0] = new Point(0,0);
-			point[1] = new Point(0,500);
-			point[2] = new Point(700,300);
-			point[3] = new Point(1000,700);
-			
-			gr.setColor(Color.RED);
-			gr.fillOval((int)point[0].getX() - 5 , (int)point[0].getY() - 5, 10, 10);
-			gr.fillOval((int)point[1].getX() - 5 , (int)point[1].getY() - 5, 10, 10);
-			gr.fillOval((int)point[2].getX() - 5 , (int)point[2].getY() - 5, 10, 10);
-			gr.fillOval((int)point[3].getX() - 5 , (int)point[3].getY() - 5, 10, 10);
-			
-			b = new Bezier();
-			b.addPoint(point);
-			for(int t100=0;t100<10000;t100++){
-				double t = (double)t100;
-				t = t/10000;
-				double[] xy = b.calBez(t);
-				gr.setColor(Color.WHITE);
-				gr.fillRect((int)xy[0], (int)xy[1], 1, 1);
-			}
-		}
-		
-		Spline sp;
-		private void testSplines(){
-			gr.setColor(Color.WHITE);
-			Point[] knots = new Point[4];
-			knots[0] = new Point(0,0);
-			knots[1] = new Point(200,300);
-			knots[2] = new Point(300,0);
-			knots[3] = new Point(900,700);
-			
-			gr.setColor(Color.GREEN);
-			gr.fillOval((int)knots[0].getX() - 5, (int)knots[0].getY() - 5, 10, 10);
-			gr.fillOval((int)knots[1].getX() - 5, (int)knots[1].getY() - 5, 10, 10);
-			gr.fillOval((int)knots[2].getX() - 5, (int)knots[2].getY() - 5, 10, 10);
-			gr.fillOval((int)knots[3].getX() - 5, (int)knots[3].getY() - 5, 10, 10);
-			
-			
-			double c0 = 0.5;
-			double c1 = 0.5;
-			double c2 = 0.5;
-			gr.setColor(Color.BLUE);
-			gr.fillOval((int)((1-c0)*knots[0].getX()+c0*knots[1].getX()) - 5 , (int)((1-c0)*knots[0].getY()+c0*knots[1].getY()) - 5, 10, 10);
-			gr.fillOval((int)((1-c1)*knots[1].getX()+c1*knots[2].getX()) - 5, (int)((1-c1)*knots[1].getY()+c1*knots[2].getY()) - 5, 10, 10);
-			gr.fillOval((int)((1-c2)*knots[2].getX()+c2*knots[3].getX()) - 5, (int)((1-c2)*knots[2].getY()+c2*knots[3].getY()) - 5, 10, 10);
-			
-			sp = new Spline(knots[0]);
-			sp.addKnot(knots[1], c0);
-			sp.addKnot(knots[2], c1);
-			sp.addKnot(knots[3], c2);
-			for(int t10000=0;t10000<10000;t10000++){
-				double t = (double)t10000;
-				t = t/10000;
-				double[] xy = sp.calStrictSpline(t);
-				gr.setColor(Color.WHITE);
-				gr.fillRect((int)xy[0], (int)xy[1], 1, 1);
-			}
-		}
-	}
 }
