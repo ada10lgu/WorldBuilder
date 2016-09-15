@@ -11,13 +11,15 @@ import geometry.Spline;
 
 public class Canvas extends JPanel {
 	
-	private Graphics g;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	public Graphics g;
 	@Override
 	public void paint(Graphics g) {
 		this.g=g;
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, getWidth(), getHeight());
-		
+	
 	/**	
 		Bezier b = new Bezier();
 		Point[] point = new Point[4];
@@ -49,4 +51,5 @@ public class Canvas extends JPanel {
 			g.fillRect((int)xy[0], (int)xy[1], 1, 1);
 		}
 	}
+	
 }
