@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 import geometry.Bezier;
-import geometry.Point;
 import geometry.Spline;
 
 public class Canvas extends JPanel {
@@ -19,17 +18,7 @@ public class Canvas extends JPanel {
 	@Override
 	public void paint(Graphics g) {
 		this.g=g;
-	
-	/**	
-		Bezier b = new Bezier();
-		Point[] point = new Point[4];
-		point[0] = new Point(0,0);
-		point[1] = new Point(0,500);
-		point[2] = new Point(700,300);
-		point[3] = new Point(1000,700); 
-		b.addPoint(point);
-		drawBezier(b, Color.WHITE);
-	*/
+		super.paint(g);
 	}
 	
 	public void drawBezier(Bezier b, Color c){
@@ -53,3 +42,4 @@ public class Canvas extends JPanel {
 	}
 	
 }
+
