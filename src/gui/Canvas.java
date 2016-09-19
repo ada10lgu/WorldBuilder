@@ -17,11 +17,10 @@ public class Canvas extends JPanel {
 	public Graphics g;
 	@Override
 	public void paint(Graphics g) {
-		this.g=g;
 		super.paint(g);
 	}
 	
-	public void drawBezier(Bezier b, Color c){
+	public void drawBezier(Bezier b, Color c, Graphics g){
 		g.setColor(c);
 		for(int t100=0;t100<10000;t100++){
 			double t = (double)t100;
@@ -31,13 +30,18 @@ public class Canvas extends JPanel {
 		}
 	}
 	
-	public void drawSplines(Spline sp, Color c){
+	public void drawSplines(Spline sp, Color c, Graphics g){
+		int mult = 10;
+		int x = 350;
+		int y = 300;
 		g.setColor(c);
-		for(int t10000=0;t10000<10000;t10000++){
-			double t = (double)t10000;
+		double[] xy0 = sp.calStrictSpline(0);
+		for(int tX=1;tX<10000;tX++){
+			double t = (double)tX;
 			t = t/10000;
-			double[] xy = sp.calStrictSpline(t);
-			g.fillRect((int)xy[0], (int)xy[1], 1, 1);
+			double[] xy1 = sp.calStrictSpline(t);
+			g.drawLine(x+(mult*(int)xy0[0]), y+(mult*(int)xy0[1]), x+(mult*(int)xy1[0]), y+(mult*(int)xy1[1]));
+			xy0 = xy1;
 		}
 	}
 	

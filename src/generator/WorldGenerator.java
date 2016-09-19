@@ -16,7 +16,10 @@ public class WorldGenerator {
 	private WorldNumberOfRegions regionAlgo;
 	private WorldCalculateAltitude altitudeAlgo;
 	
+	
+	// vector graphics
 	private Spline spline;
+	private ArrayList<Point> bezP;
 	
 	private World world;
 
@@ -29,7 +32,7 @@ public class WorldGenerator {
 	}
 
 	private ArrayList<Zone> generateRegions(int regions) {
-		ArrayList<Point> bezP = new ArrayList<Point>();			//bezier hashmap for allt points 
+		bezP = new ArrayList<Point>();			//bezier hashmap for allt points 
 		
 		ArrayList<Point> points = new ArrayList<Point>();
 		ArrayList<Point> options = new ArrayList<Point>();
@@ -50,42 +53,60 @@ public class WorldGenerator {
 				 * Bezier mapping adding clockwise from 12.00 forward
 				 */
 				ArrayList<Point> bezOpt = new ArrayList<Point>();
-				bezOpt.add(new Point(p.getX(),p.getY()+0.5, 0));
 				bezOpt.add(new Point(p.getX()+0.5,p.getY()+0.5, 0));
-				bezOpt.add(new Point(p.getX()+0.5,p.getY(), 0));
 				bezOpt.add(new Point(p.getX()+0.5,p.getY()-0.5, 0));
-				bezOpt.add(new Point(p.getX(),p.getY()-0.5, 0));
 				bezOpt.add(new Point(p.getX()-0.5,p.getY()-0.5, 0));
-				bezOpt.add(new Point(p.getX()-0.5,p.getY(), 0));
 				bezOpt.add(new Point(p.getX()-0.5,p.getY()+0.5, 0));
 				
-		//		ArrayList<Point> temp = new ArrayList<Point>();
+				System.out.println(" "+ p.getX()+" "+p.getY());
+				System.out.println("Size: "+bezP.size());
+				System.out.println("Add Option: "+bezOpt.toString());
 				
-				int start=-1;
-				int aIndex=0;					// starting index for insert in bezP
-				int end=-1;						
-				int bIndex=0;					//ending index for insert in bezP
-				for(int i=0;i<bezOpt.size();i++){
-					int tmp = bezP.indexOf(bezOpt.get(i));
-					if(tmp>=0 && start>=0){
-						start=i;
-						aIndex=tmp;
-					}else if(tmp>=0){
-						if(end<0){
-							//	normal case start finds before end
-							end=i;
-							bIndex=tmp;
-						}else{	
-							// inverting start and end
-							end=start;
-							start=i;
-						}
+				ArrayList<Point> bezRemove = new ArrayList<Point>();
+				
+				
+				for(Point op : bezOpt){
+					if(bezP.indexOf(op)<0){
+						bezRemove.add(op);
 					}
 				}
 				
 				/**
-				 * removing 
+				 * working project
 				 */
+				for(int i=0;i<bezOpt.size();i++){
+					if(!(bezP.indexOf(bezOpt.get(i))<0)){
+						switch (i) {
+							case 1 : i=0;
+								bezOpt.remove(i);
+								i--;
+								break;
+							case 2 : i=1;
+								bezOpt.add(bezOpt.remove(i-1));
+								bezOpt.remove(0);
+								i=i-2;
+								break;
+							case 3 : i=2;
+								bezOpt.add(bezOpt.remove(i-2));
+								bezOpt.add(bezOpt.remove(i-2));
+								bezOpt.remove(0);
+								i=i-3;
+								break;
+							case 4 : i=3;
+								bezOpt.add(bezOpt.remove(i-3));
+								bezOpt.add(bezOpt.remove(i-3));
+								bezOpt.add(bezOpt.remove(i-3));
+								bezOpt.remove(0);
+								i=i-4;
+								break;
+							default:
+								break;
+						}
+					}
+					System.out.println("process: "+bezOpt.toString());
+				}
+				
+				System.out.println("Adding: "+bezOpt.toString());
 			}
 		}
 		ArrayList<Zone> zones = new ArrayList<Zone>();
@@ -157,20 +178,20 @@ public class WorldGenerator {
 	}
 	
 	public Spline buildSpline(){
-		spline = new Spline();
-		for(int i=0;i<world.getZones().size();i++){
-			boolean[] coast = world.getZones().get(i).getCoastBoolean();
-			if(coast[0]){
-				
-			}
+		spline = new Spline(bezP.get(0));
+		bezP.remove(0);
+		for(Point p : bezP){
+			spline.addKnot(p);
 		}
-		
+		System.out.println("Size: "+bezP.size());
+		System.out.println(" "+bezP.toString());
 		return spline;
 	}
 
 	public World generate() {
 		int regions = regionAlgo.calculate();
 		ArrayList<Zone> zones = generateRegions(regions);
+		System.out.println("Zone Nr: "+zones.size());
 		createAltitude(zones);
 		world.addZones(zones);
 		return world;

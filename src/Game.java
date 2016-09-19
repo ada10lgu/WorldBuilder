@@ -1,5 +1,6 @@
 
 import generator.WorldGenerator;
+import geometry.Spline;
 import gui.AppGUI;
 import interfaces.ThreadListener;
 
@@ -34,6 +35,9 @@ public class Game extends Thread implements ThreadListener{
 		if(wg==null){
 			wg = new WorldGenerator(input.trim().replace(" ", ""));
 			wg.generate();
+		//	Spline sp = wg.buildSpline();
+		//	gui.toggleGFX_Text();
+		//	gui.drawSpline(sp);
 		}else{
 			String[] line = input.trim().split("\\s+");
 			char first = line[0].charAt(0);

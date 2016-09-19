@@ -19,6 +19,7 @@ import javax.swing.JTextField;
 
 import com.sun.glass.events.MouseEvent;
 
+import geometry.Spline;
 import interfaces.ThreadListener;
 
 @SuppressWarnings("serial")
@@ -91,9 +92,6 @@ public class AppGUI extends JFrame implements Runnable {
 		}
 		contPanel.add(pres, BorderLayout.BEFORE_LINE_BEGINS);
 		
-		// GFX panel;
-		GFX_Panel = new Canvas();
-		
 		// command and input field setup
 		cmd.setSize(getWidth()*1/2, 30);
 		cmd.setText("Input Seed");
@@ -161,14 +159,26 @@ public class AppGUI extends JFrame implements Runnable {
 		}
 	}
 	
+	// GFX controlls
 	public void toggleGFX_Text(){
 		if(GFX_TOGGLE){
+			GFX_Panel = new Canvas();
 			contPanel.remove(pres);
 			contPanel.add(GFX_Panel, BorderLayout.BEFORE_LINE_BEGINS);
 		}else{
 			contPanel.remove(GFX_Panel);
 			contPanel.add(pres, BorderLayout.BEFORE_LINE_BEGINS);
 		}
+		setVisible(true);
+        pres.revalidate();
+        pres.repaint();
+        pres.updateUI();
+        revalidate();
+		repaint();
+	}
+	
+	public void drawSpline(Spline sp){
+		GFX_Panel.drawSplines(sp, Color.GREEN, this.getGraphics());
 	}
 	
 	// Row Text adder for Presentation below (fixes and functionality needed)

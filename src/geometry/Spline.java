@@ -18,7 +18,10 @@ public class Spline {
 		*/
 		a = 0;
 		points = new ArrayList<Point>();
-		points.add(knots[0]);
+		if(knots.length>0){
+			points.add(knots[0]);
+		}
+		
 		for(int k=1;k<knots.length;k++){
 			this.addKnot(knots[k]);
 		}

@@ -10,7 +10,7 @@ public class WorldNumberOfRegions extends Algorithm<Void, Integer> {
 
 	@Override
 	public Integer calculate(Void... data) {
-		 return r.nextInt(1000) + 1000;
+		 return r.nextInt(10) + 10;
 	}
 
 }
