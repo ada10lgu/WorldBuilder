@@ -70,17 +70,31 @@ public class Spline {
 		/**
 		 * Strict Spline calculation without any more then bezier three points
 		 */
-		init();
 		double[] value = new double[a];
 		double u0 = 1/((double)bez.size());
 		double ui = 0;
-		while(u>ui+u0){
+		while(u>=ui+u0){
 			ui = ui+u0;
 		}
+		
 		double uj = ui+u0;						//ui+1
 		int k = (int)(u*bez.size());
 		double t = (u-ui)/(uj-ui);
 		value = bez.get(k).calBez(t);
 		return value;
+	}
+	
+	public void join(){
+		
+		// not sure if it works
+		bez.remove(0);
+		bez.remove(bez.size()-1);
+		points.remove(0);
+		points.add(points.get(0));
+		Bezier bezier = new Bezier();
+		bezier.addPoint(points.remove(0));
+		bezier.addPoint(points.get(points.size()-1));
+		bezier.addPoint(points.get(points.size()-2));
+		bez.add(bezier);
 	}
 }
