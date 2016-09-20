@@ -122,10 +122,10 @@ public class WorldGenerator {
 		// create list of points
 		ArrayList<Point> points = new ArrayList<Point>();
 		
-		for(int i=0;i<zones.size();i++){
-			double x = zones.get(i).getPoint().getX();
-			double y = zones.get(i).getPoint().getY();
-			double z = zones.get(i).getAltitude();
+		for(Zone zone : zones){
+			double x = zone.getPoint().getX();
+			double y = zone.getPoint().getY();
+			double z = zone.getAltitude();
 			
 			Point p0 = new Point(x+0.5, y+0.5, z);
 			Point p1 = new Point(x+0.5, y-0.5, z);
@@ -135,24 +135,26 @@ public class WorldGenerator {
 			points.add(p1);
 			points.add(p2);
 			points.add(p3);
+		}
+		
+		for(Point po : points){
 			
-			
-			for(Point po : points){
-				ArrayList<Integer> index = new ArrayList<Integer>();
-				for(int n=0;n<points.size();n++){
-					if(po.equals(points.get(n))){
-						index.add(n);
-					}
-					if(index.size()==4){
-						points.remove(index.get(0));
-						points.remove(index.get(1));
-						points.remove(index.get(2));
-						points.remove(index.get(3));
-						break;
-					}
-				}
+		}
+		
+		
+		/* out comment for debuging
+		for(int i=0;i<points.size()-1;){
+			if(points.get(i).distance(points.get(i+1))>Math.sqrt(2)){
+				
+				Point p = points.remove(i+1);
+				points.add(p);
+				System.out.println("more then 1: "+points.get(i).distance(points.get(i+1))+" "+i);
+			}else{
+				System.out.println("adding 1");
+				i++;
 			}
 		}
+		*/
 		
 		Spline spline = new Spline(points.remove(0));
 		for(Point p : points)

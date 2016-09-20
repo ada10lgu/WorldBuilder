@@ -47,6 +47,11 @@ public class Point {
 
 		return points;
 	}
+	
+	public double distance(Point p){
+		double dist = Math.sqrt(p.getX()*p.getX() + p.getY()*p.getY() +p.getZ()*p.getZ());
+		return dist;
+	}
 
 	@Override
 	public int hashCode() {

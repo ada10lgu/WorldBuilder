@@ -86,15 +86,16 @@ public class Spline {
 	
 	public void join(){
 		
-		// not sure if it works
+		// remove end beziers with only two points
 		bez.remove(0);
 		bez.remove(bez.size()-1);
-		points.remove(0);
-		points.add(points.get(0));
+		
+		points.remove(0);			// remove extra point
+		points.add(points.remove(0));
 		Bezier bezier = new Bezier();
-		bezier.addPoint(points.remove(0));
-		bezier.addPoint(points.get(points.size()-1));
+		bezier.addPoint(points.get(points.size()-3));
 		bezier.addPoint(points.get(points.size()-2));
+		bezier.addPoint(points.get(points.size()-1));
 		bez.add(bezier);
 	}
 }
