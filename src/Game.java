@@ -1,6 +1,6 @@
 
-import generator.WorldGenerator;
-import geometry.Spline;
+import geometry.*;
+import graph_world_generator.*;
 import gui.AppGUI;
 import interfaces.ThreadListener;
 
@@ -23,7 +23,6 @@ public class Game extends Thread implements ThreadListener{
 	@Override
 	public void run() {
 		gui = new AppGUI();
-		wg = null;
 		gui.addListener(this);
 		(new Thread(gui)).start();
 	}
@@ -33,22 +32,19 @@ public class Game extends Thread implements ThreadListener{
 		
 		
 		if(wg==null){
-			wg = new WorldGenerator(input.trim().replace(" ", ""));
+			wg = new WorldGenerator(input);
 			wg.generate();
-			Spline sp = wg.getSpline();
-			gui.toggleGFX_Text();
-			gui.drawSpline(sp);
 		}else{
 			String[] line = input.trim().split("\\s+");
 			char first = line[0].charAt(0);
 			switch(first){
-			case '/':
-				// command case with call
-				System.out.println("command: "+input);
-				break;
-			default:
-				// default print just text
-				System.out.println("default "+input);
+				case '/':
+					// command case with call
+					System.out.println("command: "+input);
+					break;
+				default:
+					// default print just text
+					System.out.println("default "+input);
 			}
 		}
 	}

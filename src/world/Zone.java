@@ -4,13 +4,11 @@ import geometry.Point;
 
 public class Zone {
 	private Point p;
-	private double altitude;
 	private boolean[] coast;
 
-	public Zone(Point p, double altitude) {
+	public Zone(Point p) {
 		this.p = p;
 		coast = new boolean[4];
-		this.altitude = altitude;
 	}
 
 	public long getX() {
@@ -22,11 +20,11 @@ public class Zone {
 	}
 
 	public double getAltitude() {
-		return altitude;
+		return p.getZ();
 	}
 
 	public void addAltitude(double d) {
-		altitude += d;
+		p.setZ(d);
 	}
 
 	public Point getPoint() {
@@ -42,6 +40,14 @@ public class Zone {
 	
 	public boolean[] getCoastBoolean(){
 		return coast;
+	}
+	
+	public boolean compare(Zone z){
+		boolean same = false;
+		if(z.getPoint().getX()==p.getX() && z.getPoint().getY()==p.getY() && z.getPoint().getZ()==p.getZ()){
+			same = true;
+		}
+		return same;
 	}
 
 	@Override

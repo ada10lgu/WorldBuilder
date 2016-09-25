@@ -38,7 +38,7 @@ public class WorldGenerator {
 		ArrayList<Point> points = new ArrayList<Point>();
 		ArrayList<Point> options = new ArrayList<Point>();
 
-		Point first = new Point(0, 0);
+		Point first = new Point(0, 0, 0);
 		options.addAll(first.neighbours());
 		points.add(first);
 
@@ -51,9 +51,9 @@ public class WorldGenerator {
 			}
 		}
 		ArrayList<Zone> zones = new ArrayList<Zone>();
-
 		for (Point p : points)
-			zones.add(new Zone(p, 0));
+			zones.add(new Zone(p));
+		
 		return zones;
 	}
 
@@ -118,43 +118,21 @@ public class WorldGenerator {
 
 	}
 	
-	public Spline buildSpline(ArrayList<Zone> zones){
+	public Spline buildSpline(){
 		// create list of points
 		ArrayList<Point> points = new ArrayList<Point>();
 		
-		for(Zone zone : zones){
-			double x = zone.getPoint().getX();
-			double y = zone.getPoint().getY();
-			double z = zone.getAltitude();
-			
-			Point p0 = new Point(x+0.5, y+0.5, z);
-			Point p1 = new Point(x+0.5, y-0.5, z);
-			Point p2 = new Point(x-0.5, y-0.5, z);
-			Point p3 = new Point(x-0.5, y+0.5, z);
-			points.add(p0);
-			points.add(p1);
-			points.add(p2);
-			points.add(p3);
-		}
+		ArrayList<Zone> zones = world.getZones();
+	
 		
-		for(Point po : points){
-			
+		for(Zone z : zones){
+			Point p = z.getPoint();
+			Point p0 = new Point(p.getX()+0.5, p.getY()+0.5, 0);
+			Point p1 = new Point(p.getX()+0.5, p.getY()-0.5, 0);
+			Point p2 = new Point(p.getX()-0.5, p.getY()-0.5, 0);
+			Point p3 = new Point(p.getX()-0.5, p.getY()+0.5, 0);
+			points.add(z.getPoint());
 		}
-		
-		
-		/* out comment for debuging
-		for(int i=0;i<points.size()-1;){
-			if(points.get(i).distance(points.get(i+1))>Math.sqrt(2)){
-				
-				Point p = points.remove(i+1);
-				points.add(p);
-				System.out.println("more then 1: "+points.get(i).distance(points.get(i+1))+" "+i);
-			}else{
-				System.out.println("adding 1");
-				i++;
-			}
-		}
-		*/
 		
 		Spline spline = new Spline(points.remove(0));
 		for(Point p : points)
@@ -169,7 +147,8 @@ public class WorldGenerator {
 		ArrayList<Zone> zones = generateRegions(regions);
 		createAltitude(zones);
 		world.addZones(zones);
-		sp = buildSpline(zones);
+		world.init();
+		sp = buildSpline();
 		sp.init();							//initate make ready for calctulation
 		sp.join();							// join both ands bezier curves to create a circle
 		return world;
@@ -178,5 +157,7 @@ public class WorldGenerator {
 	public Spline getSpline(){
 		return sp;
 	}
-
+	
 }
+
+

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Point {
+	
 
 	private double[] point;
 	
@@ -14,15 +15,24 @@ public class Point {
 
 	public double getX() {
 		return point[0];
-
 	}
-
+	
+	public void setX(double x){
+		point[0] = x;
+	}
+	
 	public double getY() {
 		return point[1];
+	}
+	public void setY(double y){
+		point[1] = y;
 	}
 	
 	public double getZ(){
 		return point[2];
+	}
+	public void setZ(double z){
+		point[2] = z;
 	}
 	
 	public double get(int n){
@@ -40,10 +50,10 @@ public class Point {
 
 	public List<Point> neighbours() {
 		ArrayList<Point> points = new ArrayList<Point>();
-		points.add(new Point(point[0], point[1] + 1));
-		points.add(new Point(point[0], point[1] - 1));
-		points.add(new Point(point[0] + 1, point[1]));
-		points.add(new Point(point[0] - 1, point[1]));
+		points.add(new Point(point[0], point[1] + 1, 0));
+		points.add(new Point(point[0], point[1] - 1, 0));
+		points.add(new Point(point[0] + 1, point[1], 0));
+		points.add(new Point(point[0] - 1, point[1], 0));
 
 		return points;
 	}
