@@ -9,10 +9,9 @@ public class Node {
 	private Point p;
 	private String name;
 	
-	public Node(String name){
+	public Node(){
 		p = null;
 		roads = new ArrayList<Road>();
-		this.name = name;
 	}
 	
 	public void setCoord(Point p){
@@ -25,6 +24,10 @@ public class Node {
 	
 	public void addRoad(Road n){
 		roads.add(n);
+	}
+	
+	public void setName(String name){
+		this.name = name;
 	}
 	
 	public String getName(){

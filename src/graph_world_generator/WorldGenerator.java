@@ -23,10 +23,12 @@ public class WorldGenerator {
 	
 	public void generate(){
 		int region = regionAlgo.calculate();
-		ArrayList<Node> regions = new ArrayList<Node>();
+		ArrayList<Regions> regions = new ArrayList<Regions>();
 		while(region>regions.size()){
-			regions.add(new Node(nameGen.genRegionName()));
+			regions.add(new Regions());
 		}
+		
+		// connecting the regions with roads
 		for(int j=0;j<regions.size();j++){
 			int roads = r.nextInt(7);
 			for(int i=0;i<roads;i++){
@@ -34,9 +36,20 @@ public class WorldGenerator {
 				if(j!=i){
 					Road road = new Road(regions.get(j), regions.get(k));
 					regions.get(j).addRoad(road);
-					regions.get(i).addRoad(road);
+					regions.get(k).addRoad(road);
 				}
 			}
 		}
+		
+		// setting regions attributes
+		
+		
+		// building and setting cordinates for the regions
+		
+		// naming regions 
+		
+		// naming roads
+		
+		// gerate towns and places in each region based on previous information
 	}
 }

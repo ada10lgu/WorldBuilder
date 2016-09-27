@@ -1,6 +1,7 @@
 package generator;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -14,8 +15,15 @@ public class NameGen {
 	static ArrayList<String> jap_name;
 	static ArrayList<String> syll;
 	static ArrayList<String> sursyll;
-	
+
 	static ArrayList<String> areaprim;
+	
+	static ArrayList<String> keep;
+	static ArrayList<String> harbor;
+	static ArrayList<String> field;
+	static ArrayList<String> city;
+	static ArrayList<String> wilderness;
+	static ArrayList<String> mountains;
 	
 	
 	
@@ -52,34 +60,39 @@ public class NameGen {
 	
 	public String genRegionName(){
 		String regionname = "";
-		int nrsyll = gen.nextInt(3);
 		int size = areaprim.size();
 		String tmp;
-		for(int n=0;n<=nrsyll;n++){
-			tmp = areaprim.get(gen.nextInt(size));
-			regionname = regionname+tmp;
-		}
+		tmp = prefix.get(gen.nextInt(size));
+		regionname = regionname + tmp;
+		tmp = areaprim.get(gen.nextInt(size));
+		regionname = regionname +" "+ tmp;
 		return regionname;
 	}
 	
 	private void initiation(){
 		// general anglo prefix
 		prefix = readFile("prefix");
-		
 		// japanese names
-		jap_name = readFile("japese_name");
+		jap_name = readFile("japanese_name");
 		// fantasy syllables for surr and prim names
 		syll = readFile("syll");
 		sursyll = readFile("sursyll");
-		// ango area prime "prefix"+this+"other"
-		areaprim = readFile("areaprim");
-    }
+		// different types of regions/areans
+		keep = readFile("keep");
+		harbor = readFile("harbor");
+		field = readFile("field");
+		city = readFile("city");
+		wilderness = readFile("wilderness");
+		mountains = readFile("mountains");
+	}
 	
 	private ArrayList<String> readFile(String file){
 		ArrayList<String> answer = new ArrayList<String>();
 		
+		ArrayList<String> working = new ArrayList<String>();
+		
 		String line = null;
-        String fileName = "areaprim";
+        String fileName = "src/namefiles/"+file;
         try {
             // FileReader reads text files in the default encoding.
             FileReader fileReader = 
@@ -90,7 +103,7 @@ public class NameGen {
                 new BufferedReader(fileReader);
 
             while((line = bufferedReader.readLine()) != null) {
-                answer.add(line);
+            	working.add(line);
             }   
 
             // Always close files.
@@ -99,7 +112,7 @@ public class NameGen {
         catch(FileNotFoundException ex) {
             System.out.println(
                 "Unable to open file '" + 
-                fileName + "'");                
+                fileName + "'");     
         }
         catch(IOException ex) {
             System.out.println(
@@ -109,6 +122,15 @@ public class NameGen {
             // ex.printStackTrace();
         }
         
+        for(String s : working){
+        	String[] name = s.split(":");
+        	for(int i=0;i<name.length;i++){
+        		answer.add(name[i]);
+        	}
+        }
+        if(!answer.isEmpty()){
+        	answer.remove(0);
+        }
         return answer;
 	}
 }
