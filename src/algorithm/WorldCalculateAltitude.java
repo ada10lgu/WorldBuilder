@@ -3,6 +3,7 @@ package algorithm;
 import java.util.Arrays;
 import java.util.Random;
 
+import node_world_structure.Regions;
 import world.Zone;
 
 public class WorldCalculateAltitude extends Algorithm<Zone, Double> {

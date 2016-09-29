@@ -11,4 +11,5 @@ public abstract class Algorithm<F,E> {
 	}
 
 	public abstract E calculate(F... data);
+	
 }

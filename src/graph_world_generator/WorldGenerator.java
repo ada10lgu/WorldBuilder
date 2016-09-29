@@ -10,15 +10,24 @@ import node_world_structure.*;
 public class WorldGenerator {
 	
 	Random r;
-	WorldNumberOfRegions regionAlgo;
+	WorldNumberOfRegions regionAlgo;			// number of region algo
+	PopCalculate popCalc;						// pop algo
+	NodeCalculateAltitude altCalc;;				// altitude algo
+	FertilityCalc fertCalc;						// fertility algo
+	CommodityCalc comCalc;						// commodity algo
 	World world;
-	NameGen nameGen;
+	NameGen nameGen;							// name algo
 	
 	public WorldGenerator(String seed){
 		r = new Random(seed.hashCode());
 		world = new World();
 		regionAlgo = new WorldNumberOfRegions(r);
+		popCalc = new PopCalculate(r);
 		nameGen = new NameGen(r);
+		altCalc = new NodeCalculateAltitude(r);
+		fertCalc = new FertilityCalc(r);
+		comCalc = new CommodityCalc(r);
+		
 	} 
 	
 	public void generate(){
@@ -42,6 +51,15 @@ public class WorldGenerator {
 		}
 		
 		// setting regions attributes
+		Regions[] regMatris = new Regions[regions.size()];
+		regions.toArray(regMatris);
+		altCalc.calculate(regMatris);
+		for(Regions reg : regions){
+			fertCalc.calculate(reg);
+			popCalc.calculate(reg);
+			comCalc.calculate(reg);
+		}
+		
 		
 		
 		// building and setting cordinates for the regions
