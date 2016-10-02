@@ -15,8 +15,10 @@ public class WorldGenerator {
 	NodeCalculateAltitude altCalc;;				// altitude algo
 	FertilityCalc fertCalc;						// fertility algo
 	CommodityCalc comCalc;						// commodity algo
+	CordinateAlgo	cordcalc;					// coord algo;
 	World world;
 	NameGen nameGen;							// name algo
+	WaterGenerator waterGen;					// generator for water and coast
 	
 	public WorldGenerator(String seed){
 		r = new Random(seed.hashCode());
@@ -27,47 +29,38 @@ public class WorldGenerator {
 		altCalc = new NodeCalculateAltitude(r);
 		fertCalc = new FertilityCalc(r);
 		comCalc = new CommodityCalc(r);
-		
+		cordcalc = new CordinateAlgo(r);
+		waterGen = new WaterGenerator(r);
 	} 
 	
-	public void generate(){
+	public World generate(){
 		int region = regionAlgo.calculate();
-		ArrayList<Regions> regions = new ArrayList<Regions>();
-		while(region>regions.size()){
-			regions.add(new Regions());
+		Regions[] regMatris = new Regions[region];
+		for(int i=0;i<region;i++){
+			regMatris[i] = new Regions();
 		}
-		
-		// connecting the regions with roads
-		for(int j=0;j<regions.size();j++){
-			int roads = r.nextInt(7);
-			for(int i=0;i<roads;i++){
-				int k = r.nextInt(regions.size()-1);
-				if(j!=i){
-					Road road = new Road(regions.get(j), regions.get(k));
-					regions.get(j).addRoad(road);
-					regions.get(k).addRoad(road);
-				}
-			}
-		}
+		// Region location
+		cordcalc.calculate(regMatris);
 		
 		// setting regions attributes
-		Regions[] regMatris = new Regions[regions.size()];
-		regions.toArray(regMatris);
+		
+		// altitude calculation;
 		altCalc.calculate(regMatris);
-		for(Regions reg : regions){
-			fertCalc.calculate(reg);
-			popCalc.calculate(reg);
-			comCalc.calculate(reg);
+		fertCalc.calculate(regMatris);
+		popCalc.calculate(regMatris);
+		comCalc.calculate(regMatris);
+		
+		// geograph 
+		world.addShore(waterGen.generate(regMatris).get(0));
+	
+		world.setName("Eremoorth");
+		// naming regions 
+		for(Regions r : regMatris){
+			r.setName(nameGen.genRegionName());
 		}
 		
-		
-		
-		// building and setting cordinates for the regions
-		
-		// naming regions 
-		
 		// naming roads
-		
-		// gerate towns and places in each region based on previous information
+		world.addRegion(regMatris);
+		return world;
 	}
 }

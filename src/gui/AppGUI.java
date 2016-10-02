@@ -21,6 +21,7 @@ import com.sun.glass.events.MouseEvent;
 
 import geometry.Spline;
 import interfaces.ThreadListener;
+import sun.font.TextLabel;
 
 @SuppressWarnings("serial")
 public class AppGUI extends JFrame implements Runnable {
@@ -38,7 +39,6 @@ public class AppGUI extends JFrame implements Runnable {
 	
 	// Constants 
 	public String Test_Field_Message;
-	private boolean GFX_TOGGLE;							// false Text generator on and GFX canvas off;
 	
 	// Data sender
 	String input;
@@ -57,7 +57,6 @@ public class AppGUI extends JFrame implements Runnable {
 		input = null;
 		presList = new ArrayList<JPanel>();
 		Test_Field_Message = "Input Seed for generation of world";
-		GFX_TOGGLE = true;
 		
 		
 		// initiate graphic
@@ -157,25 +156,10 @@ public class AppGUI extends JFrame implements Runnable {
 				
 			}
 		}
+		
+		// continue managing incomming text
 	}
 	
-	// GFX controlls
-	public void toggleGFX_Text(){
-		if(GFX_TOGGLE){
-			GFX_Panel = new Canvas();
-			contPanel.remove(pres);
-			contPanel.add(GFX_Panel, BorderLayout.BEFORE_LINE_BEGINS);
-		}else{
-			contPanel.remove(GFX_Panel);
-			contPanel.add(pres, BorderLayout.BEFORE_LINE_BEGINS);
-		}
-		setVisible(true);
-        pres.revalidate();
-        pres.repaint();
-        pres.updateUI();
-        revalidate();
-		repaint();
-	}
 	
 	public void drawSpline(Spline sp){
 		GFX_Panel.drawSplines(sp, Color.GREEN, this.getGraphics());

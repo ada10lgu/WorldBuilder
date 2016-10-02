@@ -29,9 +29,13 @@ public class Point {
 	}
 	
 	public double getZ(){
-		return point[2];
+		if(point.length>=3){
+			return point[2];
+		}
+		return 0;
 	}
 	public void setZ(double z){
+		
 		point[2] = z;
 	}
 	
@@ -75,4 +79,5 @@ public class Point {
 			return ((Point) obj).hashCode() == hashCode();
 		return false;
 	}
+
 }

@@ -2,9 +2,9 @@ package algorithm;
 
 import java.util.Random;
 
-import node_world_structure.Node;
+import node_world_structure.Regions;
 
-public class NodeCalculateAltitude extends Algorithm<Node, Double>{
+public class NodeCalculateAltitude extends Algorithm<Regions, Double>{
 
 	static Double ALT_CONSTANT;;
 	
@@ -14,7 +14,7 @@ public class NodeCalculateAltitude extends Algorithm<Node, Double>{
 	}
 	
 	@Override
-	public Double calculate(Node... data) {
+	public Double calculate(Regions... data) {
 		Double alt = r.nextDouble()*ALT_CONSTANT;
 		for(int i=0;i<data.length;i++){
 			data[i].setAlti(r.nextDouble()*alt*3/4+alt/4);

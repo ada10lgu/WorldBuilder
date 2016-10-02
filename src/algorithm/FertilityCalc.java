@@ -2,10 +2,9 @@ package algorithm;
 
 import java.util.Random;
 
-import commodity.Commodity;
-import node_world_structure.Node;
+import node_world_structure.Regions;
 
-public class FertilityCalc extends Algorithm<Node, Double>{
+public class FertilityCalc extends Algorithm<Regions, Double>{
 
 	double ALT_FERTILITY;
 	
@@ -15,7 +14,7 @@ public class FertilityCalc extends Algorithm<Node, Double>{
 	}
 
 	@Override
-	public Double calculate(Node... data) {
+	public Double calculate(Regions... data) {
 		
 		double fert = 0;
 		for(int i=0;i<data.length;i++){

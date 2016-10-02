@@ -1,8 +1,16 @@
 
+import java.awt.Color;
+import java.util.Random;
+
+import javax.swing.JPanel;
+
+import generator.DescriptGenerator;
 import geometry.*;
 import graph_world_generator.*;
 import gui.AppGUI;
+import gui.Canvas;
 import interfaces.ThreadListener;
+import node_world_structure.World;
 
 
 public class Game extends Thread implements ThreadListener{
@@ -12,6 +20,8 @@ public class Game extends Thread implements ThreadListener{
 	
 	// Generators
 	WorldGenerator wg;
+	World w;
+	DescriptGenerator descGen;
 	
 	// Managers 
 	
@@ -33,7 +43,10 @@ public class Game extends Thread implements ThreadListener{
 		
 		if(wg==null){
 			wg = new WorldGenerator(input);
-			wg.generate();
+			Random r = new Random(input.hashCode());
+			descGen = new DescriptGenerator(r);
+			w = wg.generate();
+			gui.addWord(descGen.descript(w));
 		}else{
 			String[] line = input.trim().split("\\s+");
 			char first = line[0].charAt(0);

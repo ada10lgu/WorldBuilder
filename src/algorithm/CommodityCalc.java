@@ -3,7 +3,6 @@ package algorithm;
 import java.util.ArrayList;
 import java.util.Random;
 import commodity.*;
-import node_world_structure.Node;
 import node_world_structure.Regions;
 
 public class CommodityCalc extends Algorithm<Regions, ArrayList<Commodity>>{

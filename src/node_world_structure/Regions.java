@@ -1,19 +1,19 @@
 package node_world_structure;
 
-public class Regions extends Node {
+import java.util.ArrayList;
+
+public class Regions extends Place implements PlaceInterface {
 	
-	// unique attributes for region
-	int pop;
+	ArrayList<Settlement> settlements; 
 	
 	public Regions() {
 		super();
+		settlements = new ArrayList<Settlement>();
 	}
 	
-	public void setPop(double d){
-		this.pop = (int) d;
-	}
-	
-	public int getPop(){
-		return pop;
+	public void addRegion(Settlement...sett){
+		for(Settlement s : sett){
+			settlements.add(s);
+		}
 	}
 }
