@@ -65,7 +65,7 @@ public class NameGen {
 		tmp = prefix.get(gen.nextInt(size));
 		regionname = regionname + tmp;
 		tmp = areaprim.get(gen.nextInt(size));
-		regionname = regionname +" "+ tmp;
+		regionname = regionname + tmp;
 		return regionname;
 	}
 	
@@ -84,6 +84,8 @@ public class NameGen {
 		city = readFile("city");
 		wilderness = readFile("wilderness");
 		mountains = readFile("mountains");
+		// generic region name
+		areaprim = readFile("areaprim");
 	}
 	
 	private ArrayList<String> readFile(String file){

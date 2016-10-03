@@ -18,7 +18,7 @@ public class DescriptGenerator {
 		
 		ArrayList<Regions> regions = w.getRegions();
 		for(Regions r : regions){
-			desc = desc+" "+r.getName(); 
+			desc = desc+"; "+r.getName(); 
 		}
 		
 		return desc;

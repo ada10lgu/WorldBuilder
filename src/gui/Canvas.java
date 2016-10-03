@@ -16,6 +16,8 @@ public class Canvas extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 	public Graphics g;
+
+	
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
@@ -31,7 +33,14 @@ public class Canvas extends JPanel {
 		}
 	}
 	
-	public void drawSplines(Spline sp, Color c, Graphics g){
+	@Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        
+        g.drawLine(0, 0, getWidth(), getHeight());
+    }
+	
+	public void drawSplines(Spline sp, Color c){
 		g.drawLine(0, 0, getHeight(), getWidth());
 		int mult = 50;
 		int x = 350;

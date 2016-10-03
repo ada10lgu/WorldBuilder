@@ -82,7 +82,7 @@ public class AppGUI extends JFrame implements Runnable {
 		for(int i=0;i<40;i++){
 			JPanel panel = new JPanel();
 			panel.setLayout(flowlayout);
-			panel.setBackground(Color.RED);
+			panel.setBackground(Color.GRAY);
 			panel.setAlignmentX(Component.LEFT_ALIGNMENT);
 			panel.setAlignmentY(Component.TOP_ALIGNMENT);
 			panel.add(new JLabel(" "));
@@ -162,7 +162,7 @@ public class AppGUI extends JFrame implements Runnable {
 	
 	
 	public void drawSpline(Spline sp){
-		GFX_Panel.drawSplines(sp, Color.GREEN, this.getGraphics());
+		GFX_Panel.drawSplines(sp, Color.GREEN);
 	}
 	
 	// Row Text adder for Presentation below (fixes and functionality needed)
