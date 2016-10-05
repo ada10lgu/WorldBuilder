@@ -161,9 +161,6 @@ public class AppGUI extends JFrame implements Runnable {
 	}
 	
 	
-	public void drawSpline(Spline sp){
-		GFX_Panel.drawSplines(sp, Color.GREEN);
-	}
 	
 	// Row Text adder for Presentation below (fixes and functionality needed)
 	

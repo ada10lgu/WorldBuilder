@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
@@ -15,22 +16,13 @@ public class Canvas extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public Graphics g;
-
+	private ArrayList<Bezier> beziers = new ArrayList<Bezier>();
+	private ArrayList<Spline> splines = new ArrayList<Spline>();
+	private int interval;
 	
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-	}
-	
-	public void drawBezier(Bezier b, Color c, Graphics g){
-		g.setColor(c);
-		for(int t100=0;t100<10000;t100++){
-			double t = (double)t100;
-			t = t/10000;
-			Point xy = b.calBez(t);
-			g.fillRect((int)xy.get(0), (int)xy.get(1), 1, 1);
-		}
 	}
 	
 	@Override
@@ -38,25 +30,44 @@ public class Canvas extends JPanel {
         super.paintComponent(g);
         
         g.drawLine(0, 0, getWidth(), getHeight());
+        
+        int co = 0;
+        for(Bezier b : beziers){
+        	Point p0 = b.calBez(0);
+        	for(int i=0;i<interval;i++){
+        		double t = ((double)i)/interval;
+        		Point p1 = b.calBez(t);
+        		g.drawLine((int)p0.getX(), (int)p0.getY(), (int)p1.getX(), (int)p1.getY());
+        		p0 = p1;
+        		g.setColor(new Color(co, co ,co));
+        //		co++;
+        		if(co>254){
+        			co=0;
+        		}
+        	}
+        }
+        
+        for(Spline sp : splines){
+        	Point p0 = sp.calStrictSpline(0);
+        	for(int i=1;i<interval;i++){
+        		double u = ((double)i)/interval;
+        		Point p1 = sp.calStrictSpline(u);
+        		g.drawLine((int)p0.getX(), (int)p0.getY(), (int)p1.getX(), (int)p1.getY());
+        		p0 = p1;
+        	}
+        }
     }
 	
-	public void drawSplines(Spline sp, Color c){
-		g.drawLine(0, 0, getHeight(), getWidth());
-		int mult = 50;
-		int x = 350;
-		int y = 300;
-		g.setColor(c);
-		Point xy0 = sp.calStrictSpline(0);
-		for(int tX=1;tX<1000;tX++){
-			double t = (double)tX;
-			t = t/1000;
-			g.setColor(new Color((int)(255*t),(int)(255*t),0));
-			Point xy1 = sp.calStrictSpline(t);
-		//	g.drawRect((int)(x+mult*xy0[0]), (int)(y+mult*xy0[1]), 1, 1);
-			g.drawLine((int)(x+mult*xy0.get(0)), (int)(y+mult*xy0.get(1)), (int)(x+mult*xy1.get(0)), (int)(y+mult*xy1.get(1)));
-			xy0 = xy1;
-		}
+	public void setInterval(int t){
+		this.interval = t;
+	}
+
+	public void addBezier(Bezier b){
+		beziers.add(b);
 	}
 	
+	public void addSpline(Spline sp){
+		splines.add(sp);
+	}
 }
 
